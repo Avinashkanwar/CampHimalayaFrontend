@@ -1,0 +1,195 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #F0F4ED;
+  --color-secondary: #F5F5F7;
+  --color-accent-orange: #263F26;
+  --color-accent-orange-light: #1A5D07;
+  --color-accent-blue: #E7D9DD;
+  --color-accent-green: #263F26;
+
+  /* Custom palette */
+  --color-deep-forest: #263F26;
+  --color-deep-forest-hover: #3A5C3A;
+  --color-mint: #F0F4ED;
+  --color-rose: #E7D9DD;
+  --color-mint-50: rgb(230, 230, 230);
+  --color-soft-green: #263F26;
+  --color-card-bg: #F5F5F7;
+  --color-secondary-text: #1A5D07;
+
+  /* Custom Hipcamp-style palette variables */
+  --white: #fff;
+  --black: #000;
+  --neutral-50: #FAF9F6;
+  --neutral-100: #F3F1EA;
+  --neutral-200: #D0CDC6;
+  --neutral-300: #908E7F;
+  --neutral-400: #716F5F;
+  --neutral-500: #303027;
+  --neutral-600: #292922;
+  --neutral-700: #2C2B1C;
+  --neutral-800: #1C1C19;
+  --neutral-900: #1A1A16;
+
+  --primary-700: #EC5017;
+  --link-700: #1F7EF0;
+  --success-700: #6BB95C;
+  --alert-700: #F1952B;
+  --error-700: #B53142;
+  --info-700: #584167;
+
+  /* Tailwind Color Maps */
+  --color-neutral-50: var(--neutral-50);
+  --color-neutral-100: var(--neutral-100);
+  --color-neutral-200: var(--neutral-200);
+  --color-neutral-300: var(--neutral-300);
+  --color-neutral-400: var(--neutral-400);
+  --color-neutral-500: var(--neutral-500);
+  --color-neutral-600: var(--neutral-600);
+  --color-neutral-700: var(--neutral-700);
+  --color-neutral-800: var(--neutral-800);
+  --color-neutral-900: var(--neutral-900);
+
+  --color-primary-700: var(--primary-700);
+  --color-link-700: var(--link-700);
+  --color-success-700: var(--success-700);
+  --color-alert-700: var(--alert-700);
+  --color-error-700: var(--error-700);
+  --color-info-700: var(--info-700);
+
+  --color-surface: var(--neutral-50);
+  --color-raised: var(--white);
+  --color-emphasis: var(--neutral-900);
+  --color-divider: var(--neutral-100);
+  --color-border: var(--neutral-200);
+  --color-focus: var(--primary-700);
+  --color-shimmer-highlight: var(--neutral-100);
+  --color-content: var(--neutral-800);
+  --color-muted: var(--neutral-400);
+  --color-primary-brand: var(--primary-700);
+  --color-logo-tent: var(--primary-700);
+  --color-link: var(--link-700);
+  --color-success: var(--success-700);
+  --color-alert: var(--alert-700);
+  --color-error: var(--error-700);
+  --color-info: var(--info-700);
+
+  --font-display: 'Playfair Display', serif;
+  --font-sans: 'Inter', sans-serif;
+}
+
+/* Custom Scrollbars */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-deep-forest) var(--color-mint);
+}
+
+body {
+  @apply font-sans bg-mint text-slate-800 overflow-x-hidden antialiased;
+}
+
+#root {
+  @apply w-full max-w-full m-0 text-left border-none min-h-screen;
+}
+
+/* Custom Tailwind Utilities (Tailwind v4 style) */
+@utility font-display {
+  font-family: var(--font-display);
+}
+
+@utility glass {
+  @apply bg-card-bg border border-slate-200/80 shadow-lg shadow-slate-200/30;
+}
+
+@utility glass-dark {
+  @apply bg-white border border-slate-200 shadow-xl;
+}
+
+@utility hero-bg {
+  @apply bg-mint;
+}
+
+@utility mountain-overlay {
+  @apply absolute bottom-0 left-0 right-0 h-[200px];
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%23F0F4ED' d='M0,224L48,213.3C96,203,192,181,288,181.3C384,181,480,203,576,224C672,245,768,267,864,250.7C960,235,1056,181,1152,165.3C1248,149,1344,171,1392,181.3L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") bottom/cover no-repeat;
+}
+
+@keyframes fadeInUp { 
+  from { opacity: 0; transform: translateY(40px); } 
+  to { opacity: 1; transform: translateY(0); } 
+}
+
+@keyframes float { 
+  0%, 100% { transform: translateY(0); } 
+  50% { transform: translateY(-20px); } 
+}
+
+@utility gradient-text { 
+  @apply bg-gradient-to-r from-deep-forest to-secondary-text bg-clip-text text-transparent;
+}
+
+@utility btn-primary { 
+  @apply bg-deep-forest hover:bg-deep-forest-hover text-white transition-all duration-300 shadow-[0_4px_15px_rgba(38,63,38,0.15)] hover:-translate-y-[2px] hover:shadow-[0_8px_25px_rgba(38,63,38,0.25)]; 
+}
+
+@utility btn-secondary { 
+  @apply bg-transparent border-2 border-deep-forest text-deep-forest transition-all duration-300 hover:bg-deep-forest hover:text-white; 
+}
+
+@utility camp-card { 
+  @apply transition-all duration-500 hover:-translate-y-2.5 hover:shadow-[0_20px_40px_rgba(38,63,38,0.06)];
+}
+
+@utility card-image { 
+  @apply transition-transform duration-700 ease-out; 
+}
+
+@utility activity-card { 
+  @apply transition-all duration-300 hover:bg-deep-forest/5 hover:border-deep-forest hover:scale-105; 
+}
+
+@utility masonry-grid { 
+  @apply gap-4 columns-1 sm:columns-2 md:columns-3 lg:columns-4;
+}
+
+@utility masonry-item { 
+  @apply break-inside-avoid mb-4; 
+}
+
+@utility animate-fadeInUp { 
+  animation: fadeInUp 0.8s ease forwards; 
+}
+
+@utility animate-float { 
+  animation: float 6s ease-in-out infinite; 
+}
+
+@utility reveal { 
+  @apply opacity-0 translate-y-[30px] transition-all duration-700 ease-out; 
+}
+
+.reveal.active {
+  @apply opacity-100 translate-y-0;
+}
+
+@utility nav-link { 
+  @apply relative after:content-[''] after:absolute after:bottom-[-4px] after:left-0 after:w-0 after:h-[2px] after:bg-secondary-text after:transition-all after:duration-300 hover:after:w-full [&.active]:after:w-full;
+}
+
+@utility phone-mockup { 
+  @apply bg-gradient-to-br from-slate-700 to-slate-800 rounded-[40px] p-3 shadow-[0_50px_100px_rgba(0,0,0,0.15),inset_0_1px_0_rgba(255,255,255,0.2)]; 
+}
+
+@utility phone-screen { 
+  @apply bg-gradient-to-b from-sky-400 to-sky-600 rounded-[32px] overflow-hidden; 
+}
+
+@utility tag-badge { 
+  @apply text-[10px] px-2.5 py-1 rounded-full uppercase tracking-wider font-semibold; 
+}
+
+@utility search-input { 
+  @apply focus:ring-3 focus:ring-deep-forest/20; 
+}
