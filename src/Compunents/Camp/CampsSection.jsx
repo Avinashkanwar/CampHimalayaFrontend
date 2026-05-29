@@ -32,9 +32,15 @@ function CampCard({ camp }) {
             {camp.location}
           </p>
           
-          <span className="text-[10px] font-extrabold text-white uppercase bg-[#EC5017] px-3 py-1.5 rounded-full flex items-center gap-1 group-hover:bg-[#ff6229] transition-colors duration-300 shadow-sm shadow-[#EC5017]/10">
-            View details <ArrowRight className="w-3 h-3" />
-          </span>
+          <button 
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(`/explore/all?q=${encodeURIComponent(camp.name)}`)
+            }}
+            className="text-[10px] font-extrabold text-white uppercase bg-[#EC5017] px-3 py-1.5 rounded-full flex items-center gap-1 group-hover:bg-[#ff6229] transition-colors duration-300 shadow-sm shadow-[#EC5017]/10 cursor-pointer"
+          >
+            Explore <ArrowRight className="w-3 h-3" />
+          </button>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useParams, useNavigate } from 'react-router-dom'
+import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
 import { MapPin, Star, ArrowLeft, SlidersHorizontal, Mountain, Compass, Map, Layers, ChevronRight, Calendar, Users, Search, MountainSnow, Plus, Minus } from 'lucide-react'
 import { campsData } from '../../screens/data'
 import { MapModal } from '../Modals/Modals'
@@ -11,10 +11,12 @@ export default function ExploreMapScreen() {
   const [category, setCategory] = useState(initialCategory) // 'all', 'camps', 'treks', 'hidden'
   const [hoveredCampId, setHoveredCampId] = useState(null)
   const [selectedCampId, setSelectedCampId] = useState(null)
+  const [searchParams] = useSearchParams()
   
   // Search state variables
-  const [searchText, setSearchText] = useState('')
-  const [searchDates, setSearchDates] = useState('')
+  const [searchText, setSearchText] = useState(searchParams.get('q') || '')
+  const [searchDates, setSearchDates] = useState(searchParams.get('date') || '')
+  const [searchDuration, setSearchDuration] = useState(searchParams.get('duration') || '')
   const [searchGuests, setSearchGuests] = useState('')
   
   const [zoomLevel, setZoomLevel] = useState(1)
@@ -140,8 +142,8 @@ export default function ExploreMapScreen() {
       {/* 2. SPLIT SCREEN BODY */}
       <div className="flex-grow flex flex-col lg:flex-row overflow-hidden w-full h-[calc(100vh-80px)]">
         
-        {/* LEFT COLUMN: Title, Search Widget, Tabs & List (Width: 62% for spacious listings) */}
-        <div className="w-full lg:w-[62%] flex flex-col bg-white border-r border-slate-200/80 shadow-md h-full overflow-y-auto">
+        {/* LEFT COLUMN: Title, Search Widget, Tabs & List (Width: 40% for spacious listings) */}
+        <div className="w-full lg:w-[40%] flex flex-col bg-white border-r border-slate-200/80 shadow-md h-full overflow-y-auto">
           
           {/* Header Title Info */}
           <div className="p-6 pb-2 shrink-0 text-left">
@@ -254,7 +256,7 @@ export default function ExploreMapScreen() {
                           {camp.location}
                         </p>
 
-                        <p className="text-slate-450 text-xs line-clamp-2 mt-2 leading-relaxed font-medium">
+                        <p className="text-slate-450 text-xs columns-2 gap-4 mt-2 leading-relaxed font-medium">
                           {camp.description}
                         </p>
                       </div>
@@ -289,8 +291,8 @@ export default function ExploreMapScreen() {
           </div>
         </div>
 
-        {/* RIGHT COLUMN: Interactive Live Google Maps (Width: 38% for sleek, real-world geographical precision) */}
-        <div className="w-full lg:w-[38%] h-full bg-slate-50 overflow-hidden relative flex flex-col items-center justify-center border-l border-slate-200">
+        {/* RIGHT COLUMN: Interactive Live Google Maps (Width: 60% for sleek, real-world geographical precision) */}
+        <div className="w-full lg:w-[60%] h-full bg-slate-50 overflow-hidden relative flex flex-col items-center justify-center border-l border-slate-200">
           
           {/* Map Layer Indicators */}
           <div className="absolute top-6 left-6 z-20 flex gap-2">

@@ -84,12 +84,6 @@ export default function BecomeHostScreen() {
       <div className="absolute top-0 left-0 right-0 h-[400px] bg-gradient-to-b from-deep-forest/5 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Back */}
-        <button onClick={() => navigate('/')} className="btn-secondary px-5 py-2.5 rounded-xl font-semibold mb-8 inline-flex items-center space-x-2 bg-white">
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Home</span>
-        </button>
-
         {/* Header */}
         <div className="text-center mb-10">
           <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose text-deep-forest border border-rose/30 mb-4">Host Program</span>

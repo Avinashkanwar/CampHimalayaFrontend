@@ -18,7 +18,6 @@ export default function PublicRoutes() {
       <Route element={<Layout />}>
         <Route path="/" element={<Home />} />
         <Route path="/camp/:campId" element={<CampDetailScreen />} />
-        <Route path="/become-host" element={<BecomeHostScreen />} />
         <Route path="/terms" element={<TermsScreen />} />
       </Route>
 
@@ -26,6 +25,7 @@ export default function PublicRoutes() {
       <Route element={<ExploreLayout />}>
         <Route path="/explore" element={<ExploreMapScreen />} />
         <Route path="/explore/:category" element={<ExploreMapScreen />} />
+        <Route path="/become-host" element={<BecomeHostScreen />} />
       </Route>
     </>
   )

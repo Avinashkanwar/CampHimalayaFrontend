@@ -3,8 +3,9 @@ import { Search, Tent, ArrowRight, HousePlus, ChevronDown, MapPin, Calendar, Use
 
 export default function Hero({ onExplore, onHost, onExploreCategory }) {
   const [search, setSearch] = useState('')
-  const [dates, setDates] = useState('')
-  const [guests, setGuests] = useState('')
+  const [category, setCategory] = useState('')
+  const [date, setDate] = useState('')
+  const [duration, setDuration] = useState('')
   const [activeTab, setActiveTab] = useState('destination')
 
   return (
@@ -75,37 +76,63 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
                 </div>
               </div>
 
-              {/* Dates */}
+              {/* Category */}
               <div className="border border-slate-300 rounded-xl px-4 py-3.5 flex items-center gap-3 bg-white focus-within:ring-2 focus-within:ring-[#E75A38]/15 focus-within:border-[#E75A38] transition-all duration-300 shadow-sm">
-                <Calendar className="w-5 h-5 text-slate-800 shrink-0" />
+                <Tent className="w-5 h-5 text-slate-800 shrink-0" />
                 <div className="flex-grow">
-                  <input
-                    type="text"
-                    value={dates}
-                    onChange={e => setDates(e.target.value)}
-                    placeholder="Add dates"
-                    className="w-full bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none text-sm font-semibold leading-normal"
-                  />
+                  <select
+                    value={category}
+                    onChange={e => setCategory(e.target.value)}
+                    className="w-full bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none text-sm font-semibold leading-normal appearance-none cursor-pointer"
+                  >
+                    <option value="" disabled hidden>Select Category</option>
+                    <option value="camping">Camping Areas</option>
+                    <option value="trekking">Trekking Trails</option>
+                    <option value="hidden">Hidden Places</option>
+                  </select>
                 </div>
               </div>
 
-              {/* Guests */}
+              {/* Dynamic 3rd Input: Date vs Duration */}
               <div className="border border-slate-300 rounded-xl px-4 py-3.5 flex items-center gap-3 bg-white focus-within:ring-2 focus-within:ring-[#E75A38]/15 focus-within:border-[#E75A38] transition-all duration-300 shadow-sm">
-                <User className="w-5 h-5 text-slate-800 shrink-0" />
+                <Calendar className="w-5 h-5 text-slate-800 shrink-0" />
                 <div className="flex-grow">
-                  <input
-                    type="text"
-                    value={guests}
-                    onChange={e => setGuests(e.target.value)}
-                    placeholder="Add guests"
-                    className="w-full bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none text-sm font-semibold leading-normal"
-                  />
+                  {category === 'trekking' || category === 'hidden' ? (
+                    <select
+                      value={duration}
+                      onChange={e => setDuration(e.target.value)}
+                      className="w-full bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none text-sm font-semibold leading-normal appearance-none cursor-pointer"
+                    >
+                      <option value="" disabled hidden>Add Duration</option>
+                      <option value="1-2">1-2 Days</option>
+                      <option value="3-5">3-5 Days</option>
+                      <option value="7+">1 Week+</option>
+                    </select>
+                  ) : (
+                    <input
+                      type="date"
+                      value={date}
+                      onChange={e => setDate(e.target.value)}
+                      className="w-full bg-transparent text-slate-800 placeholder-slate-500 focus:outline-none text-sm font-semibold leading-normal"
+                    />
+                  )}
                 </div>
               </div>
 
               {/* Search Button */}
               <button
-                onClick={() => onExplore(search)}
+                onClick={() => {
+                  if (!search.trim() || !category) {
+                    alert('Please enter a destination and select a category.')
+                    return
+                  }
+                  onExplore({ 
+                    search, 
+                    category, 
+                    date: (category === 'camping' || !category) ? date : '',
+                    duration: (category === 'trekking' || category === 'hidden') ? duration : '' 
+                  })
+                }}
                 className="w-full bg-[#E75A38] hover:bg-[#D64E2D] text-white font-bold py-4 rounded-2xl flex items-center justify-center gap-2 shadow-lg shadow-[#E75A38]/15 hover:shadow-xl transition-all duration-300 cursor-pointer"
               >
                 <Search className="w-5 h-5" />
@@ -131,7 +158,10 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl mx-auto mb-6 animate-fadeInUp delay-400">
           
           {/* Card 1: Camping Areas */}
-          <div className="rounded-[2.2rem] overflow-hidden shadow-xl border border-slate-200/50 bg-white flex flex-col group">
+          <div 
+            onClick={() => onExploreCategory('camps')}
+            className="rounded-[2.2rem] overflow-hidden shadow-xl border border-slate-200/50 bg-white flex flex-col group cursor-pointer"
+          >
             <div className="relative h-48 overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&auto=format&fit=crop&q=80"
@@ -145,7 +175,7 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
                   POPULAR RETREATS
                 </span>
                 <h3 className="text-base sm:text-lg font-bold text-white leading-snug mt-2 min-h-[44px]">
-                  Explore pristine forest and riverside camping areas.
+                  best camping spots
                 </h3>
                 <div className="mt-4 flex justify-between items-center">
                   <button
@@ -160,7 +190,10 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
           </div>
 
           {/* Card 2: Trekking Areas */}
-          <div className="rounded-[2.2rem] overflow-hidden shadow-xl border border-slate-200/50 bg-white flex flex-col group">
+          <div 
+            onClick={() => onExploreCategory('treks')}
+            className="rounded-[2.2rem] overflow-hidden shadow-xl border border-slate-200/50 bg-white flex flex-col group cursor-pointer"
+          >
             <div className="relative h-48 overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?w=600&auto=format&fit=crop&q=80"
@@ -174,7 +207,7 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
                   ADVENTURE TRAILS
                 </span>
                 <h3 className="text-base sm:text-lg font-bold text-[#1E1205] leading-snug mt-2 min-h-[44px]">
-                  Conquer legendary Himalayan trekking base camps.
+                  best trekking trails
                 </h3>
                 <div className="mt-4 flex justify-between items-center">
                   <button
@@ -189,7 +222,10 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
           </div>
 
           {/* Card 3: Hidden Places */}
-          <div className="rounded-[2.2rem] overflow-hidden shadow-xl border border-slate-200/50 bg-white flex flex-col group">
+          <div 
+            onClick={() => onExploreCategory('hidden')}
+            className="rounded-[2.2rem] overflow-hidden shadow-xl border border-slate-200/50 bg-white flex flex-col group cursor-pointer"
+          >
             <div className="relative h-48 overflow-hidden">
               <img
                 src="https://images.unsplash.com/photo-1478131143081-80f7f84ca84d?w=600&auto=format&fit=crop&q=80"
@@ -203,7 +239,7 @@ export default function Hero({ onExplore, onHost, onExploreCategory }) {
                   SECRET SPOTS
                 </span>
                 <h3 className="text-base sm:text-lg font-bold text-white leading-snug mt-2 min-h-[44px]">
-                  Unwind in secret, hidden glamping paradises.
+                  best hidden places
                 </h3>
                 <div className="mt-4 flex justify-between items-center">
                   <button
