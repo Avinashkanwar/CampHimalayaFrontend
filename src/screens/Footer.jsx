@@ -78,23 +78,29 @@ export default function Footer() {
             <h4 className="font-semibold text-slate-800 mb-4">Contact Us</h4>
             <ul className="space-y-3">
               <li className="flex items-start space-x-3"><Mail className="w-4 h-4 text-secondary-text mt-0.5 flex-shrink-0" /><span className="text-slate-500 text-sm">hello@camphimalaya.com</span></li>
-              <li className="flex items-start space-x-3"><Phone className="w-4 h-4 text-secondary-text mt-0.5 flex-shrink-0" /><span className="text-slate-500 text-sm">+91 98765 43210</span></li>
+              <li className="flex items-start space-x-3"><Phone className="w-4 h-4 text-secondary-text mt-0.5 flex-shrink-0" /><span className="text-slate-500 text-sm">+91 98173 96832</span></li>
               <li className="flex items-start space-x-3"><MapPin className="w-4 h-4 text-secondary-text mt-0.5 flex-shrink-0" /><span className="text-slate-500 text-sm">Manali, Himachal Pradesh<br />India 175131</span></li>
             </ul>
           </div>
         </div>
 
-        {/* Newsletter */}
-        <div className="glass rounded-2xl p-8 mb-12 bg-white border border-slate-200/80 shadow-md shadow-slate-150">
+        {/* Query Section */}
+        <div id="query" className="glass rounded-2xl p-8 mb-12 bg-white border border-slate-200/80 shadow-md shadow-slate-150">
           <div className="grid md:grid-cols-2 gap-8 items-center">
             <div>
-              <h3 className="font-display text-2xl font-bold text-slate-800 mb-2">Subscribe to Our Newsletter</h3>
-              <p className="text-slate-500">Get exclusive deals, new campsite alerts, and travel tips delivered to your inbox.</p>
+              <h3 className="font-display text-2xl font-bold text-slate-800 mb-2">Have a Query?</h3>
+              <p className="text-slate-500">Need help planning your next adventure? Call us or send a direct message.</p>
             </div>
-            <form className="flex flex-col sm:flex-row gap-3" onSubmit={e => e.preventDefault()}>
-              <input type="email" placeholder="Enter your email address" required className="flex-1 bg-slate-50 border border-slate-200 rounded-xl px-5 py-3.5 text-slate-800 placeholder-slate-400 focus:outline-none focus:border-deep-forest transition-colors" />
-              <button type="submit" className="btn-primary px-8 py-3.5 rounded-xl font-semibold text-white whitespace-nowrap">Subscribe</button>
-            </form>
+            <div className="flex flex-col gap-4 md:justify-center items-start md:items-end w-full">
+              <a href="tel:9817396832" className="btn-primary w-full max-w-[320px] px-6 py-3.5 rounded-xl font-semibold text-white whitespace-nowrap flex items-center justify-center space-x-2">
+                <Phone className="w-5 h-5" />
+                <span>Call on +91 98173 96832</span>
+              </a>
+              <a href="mailto:hello@camphimalaya.com" className="bg-slate-100 hover:bg-slate-200 text-slate-800 w-full max-w-[320px] px-6 py-3.5 rounded-xl font-semibold whitespace-nowrap transition-colors flex items-center justify-center space-x-2">
+                <Mail className="w-5 h-5" />
+                <span>Email on hello@camphimalaya.com</span>
+              </a>
+            </div>
           </div>
         </div>
 

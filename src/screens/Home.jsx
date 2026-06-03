@@ -3,8 +3,8 @@ import { useNavigate } from 'react-router-dom'
 import Hero from './Hero'
 import CampsSection from '../Compunents/Camp/CampsSection'
 import HostSection from '../Compunents/Host/HostSection'
-import AdventureSection from './AdventureSection'
 import GallerySection from '../Compunents/Gallery/GallerySection'
+import DestinationsSection from '../Compunents/Destinations/DestinationsSection'
 
 export default function Home() {
   const navigate = useNavigate()
@@ -53,9 +53,9 @@ export default function Home() {
         onHost={handleHost} 
         onExploreCategory={handleExploreCategory}
       />
+      <DestinationsSection />
       <HostSection />
       <CampsSection searchQuery={searchQuery} />
-      <AdventureSection />
       <GallerySection />
     </>
   )

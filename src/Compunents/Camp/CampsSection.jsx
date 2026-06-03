@@ -7,8 +7,8 @@ function CampCard({ camp }) {
   const navigate = useNavigate()
   return (
     <div 
-      onClick={() => navigate(`/camp/${camp.id}`)} 
-      className="camp-card group relative h-80 rounded-[2.2rem] overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-350 cursor-pointer"
+      onClick={() => navigate(`/explore/all?q=${encodeURIComponent(camp.location)}`)} 
+      className="camp-card flex-none w-[85vw] md:w-auto snap-start group relative h-80 rounded-[2.2rem] overflow-hidden shadow-md hover:shadow-2xl hover:-translate-y-1 transition-all duration-350 cursor-pointer"
     >
       {/* Background Image */}
       <img 
@@ -16,6 +16,18 @@ function CampCard({ camp }) {
         alt={camp.name} 
         className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" 
       />
+
+      {/* Floating Map Thumbnail Overlay */}
+      <div className="absolute top-4 right-4 w-16 h-16 rounded-xl shadow-lg z-10 overflow-hidden border-2 border-white cursor-pointer group/map hover:scale-110 transition-all shadow-black/20">
+        <img 
+          src="https://images.unsplash.com/photo-1569336415962-a4bd9f69cd83?w=150&h=150&fit=crop" 
+          alt="Map preview" 
+          className="w-full h-full object-cover opacity-90 group-hover/map:scale-125 transition-transform duration-500"
+        />
+        <div className="absolute inset-0 bg-black/10 flex items-center justify-center">
+          <MapPin className="w-5 h-5 text-[#EC5017] drop-shadow-md" fill="white" />
+        </div>
+      </div>
 
       {/* Dark Ambient Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-slate-950/20 to-transparent transition-opacity duration-300" />
@@ -48,6 +60,8 @@ function CampCard({ camp }) {
 }
 
 export default function CampsSection({ searchQuery }) {
+  const navigate = useNavigate()
+
   // Apply global search filter if present
   const filteredCamps = campsData.filter(c => {
     if (!searchQuery) return true
@@ -59,12 +73,11 @@ export default function CampsSection({ searchQuery }) {
     )
   })
 
-  // Distribute into 3 distinct sections
-  const campingAreas = filteredCamps.filter(c => c.category.includes('forest') || c.category.includes('river') || c.category.includes('budget'))
-  const trekkingAreas = filteredCamps.filter(c => c.category.includes('trekking'))
-  const scenicPlaces = filteredCamps.filter(c => c.category.includes('luxury') || c.tags.includes('Hidden Gem') || c.tags.includes('Mountain View'))
+  const forestCamping = filteredCamps.filter(c => c.category.includes('forest'))
+  const tentCamping = filteredCamps.filter(c => c.category.includes('popular') || c.category.includes('all'))
+  const riversideCamping = filteredCamps.filter(c => c.category.includes('river'))
 
-  const hasResults = campingAreas.length > 0 || trekkingAreas.length > 0 || scenicPlaces.length > 0
+  const hasResults = filteredCamps.length > 0
 
   return (
     <section id="explore" className="py-16 bg-mint relative">
@@ -76,67 +89,35 @@ export default function CampsSection({ searchQuery }) {
           </div>
         )}
 
-        {/* 1. Camping Areas Section */}
-        {campingAreas.length > 0 && (
+        {/* Discover Top Spots Section */}
+        {hasResults && (
           <div className="mb-20 reveal">
             <div className="text-left mb-8">
               <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose text-deep-forest border border-rose/30 mb-3">
-                Forest & River Camps
+                Local Favorites
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-850 mb-2">
-                Explore Camping Areas
+                Discover top spots near you
               </h2>
               <p className="text-slate-500 text-base max-w-2xl">
-                Discover handpicked pristine campsites nestled inside quiet woodlands and alongside refreshing high mountain streams.
+                Explore the best-rated camping destinations and beautiful wilderness areas around you.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {campingAreas.map(c => <CampCard key={c.id} camp={c} />)}
+            <div className="flex md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 overflow-x-auto pb-6 snap-x snap-mandatory hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 md:overflow-visible">
+              {filteredCamps.map(c => <CampCard key={c.id} camp={c} />)}
             </div>
           </div>
         )}
-
-        {/* 2. Trekking Areas Section */}
-        {trekkingAreas.length > 0 && (
-          <div className="mb-20 reveal">
-            <div className="text-left mb-8">
-              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose text-deep-forest border border-rose/30 mb-3">
-                High Altitude Bases
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-850 mb-2">
-                Trekking Areas
-              </h2>
-              <p className="text-slate-500 text-base max-w-2xl">
-                Basecamps for legendary trails, ski destinations, and mountain slopes designed for the true explorer.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {trekkingAreas.map(c => <CampCard key={c.id} camp={c} />)}
-            </div>
-          </div>
-        )}
-
-        {/* 3. Scenic Places Section */}
-        {scenicPlaces.length > 0 && (
-          <div className="reveal">
-            <div className="text-left mb-8">
-              <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose text-deep-forest border border-rose/30 mb-3">
-                Glamping & Panorama
-              </span>
-              <h2 className="font-display text-3xl sm:text-4xl font-bold text-slate-850 mb-2">
-                Hidden Places
-              </h2>
-              <p className="text-slate-500 text-base max-w-2xl">
-                Unforgettable glamping tents under starry high skies, snow-covered views, and stunning landscapes.
-              </p>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {scenicPlaces.map(c => <CampCard key={c.id} camp={c} />)}
-            </div>
-          </div>
-        )}
-
       </div>
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </section>
   )
 }

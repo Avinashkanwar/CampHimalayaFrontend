@@ -17,15 +17,21 @@ export default function Navbar({ onLoginClick }) {
   const links = [
     { to: '/', hash: '#home', label: 'Home' },
     { to: '/', hash: '#explore', label: 'Explore Campsites' },
-    { to: '/', hash: '#hosts', label: 'Hosts' },
-    { to: '/', hash: '#adventures', label: 'Adventures' },
     { to: '/', hash: '#gallery', label: 'Gallery' },
     { to: '/', hash: '#contact', label: 'Contact' },
+    { to: '/', hash: '#query', label: 'Query', isButton: false },
+    { to: '/book-tent', hash: '', label: 'Book a Tent', isButton: false },
+    { to: '/become-host', hash: '', label: 'Become a Host', isButton: true },
   ]
 
   const handleNavClick = (e, link) => {
     e.preventDefault()
     setOpen(false)
+
+    if (link.to !== '/' || !link.hash) {
+      navigate(link.to)
+      return
+    }
 
     // If we're already on the home page, just scroll to the section
     if (location.pathname === '/') {
@@ -67,7 +73,7 @@ export default function Navbar({ onLoginClick }) {
               <a 
                 key={l.label} 
                 href={l.hash} 
-                className="nav-link text-sm font-semibold text-slate-600 hover:text-secondary-text transition-colors" 
+                className={l.isButton ? "bg-transparent hover:bg-[#1E3E2F] hover:text-white text-[#1E3E2F] border-2 border-[#1E3E2F] shadow-sm text-sm font-bold px-5 py-2 rounded-full transition-all transform hover:-translate-y-0.5" : "nav-link text-sm font-semibold text-slate-600 hover:text-secondary-text transition-colors"} 
                 onClick={(e) => handleNavClick(e, l)}
               >
                 {l.label}
@@ -84,6 +90,16 @@ export default function Navbar({ onLoginClick }) {
             {open ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
+      </div>
+
+      {/* Announcement Banner */}
+      <div className="text-slate-800 text-xs sm:text-sm font-semibold py-2 px-4 flex flex-wrap items-center justify-center gap-3 border-t border-slate-200/50">
+        <span>
+          🏕️ Want to book a premium <span className="text-[#EC5017] font-black animate-pulse inline-block mx-0.5">Tent</span> or <span className="text-[#EC5017] font-black animate-pulse inline-block mx-0.5">Sleeping Bags</span> for your camp?
+        </span>
+        <Link to="/book-tent" className="bg-[#1E3E2F] text-white px-4 py-1.5 rounded-full text-xs font-bold hover:bg-slate-900 transition-colors shadow-sm">
+          Book Now
+        </Link>
       </div>
 
       {open && (

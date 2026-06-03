@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useParams, useNavigate, useOutletContext } from 'react-router-dom'
 import { Star, MapPin, Calendar, Users, ArrowLeft, Check, Compass, Coffee, Flame, ShieldCheck, CloudSun, Mountain, Award } from 'lucide-react'
-import { campsData, TAG_COLORS } from '../../screens/data'
+import { campsData, TAG_COLORS, galleryData } from '../../screens/data'
 
 export default function CampDetailScreen() {
   const { campId } = useParams()
@@ -53,17 +53,11 @@ export default function CampDetailScreen() {
   }
 
   return (
-    <div className="min-h-screen bg-mint pt-24 pb-20 relative">
+    <div className="min-h-screen bg-mint pt-10 pb-20 relative">
       {/* Background gradients */}
       <div className="absolute top-0 left-0 right-0 h-[500px] bg-gradient-to-b from-deep-forest/5 via-transparent to-transparent pointer-events-none" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        {/* Back Button */}
-        <button onClick={() => navigate(-1)} className="btn-secondary px-5 py-2.5 rounded-xl font-semibold mb-8 inline-flex items-center space-x-2 bg-white">
-          <ArrowLeft className="w-5 h-5" />
-          <span>Back to Explore</span>
-        </button>
-
         {booked ? (
           <div className="max-w-xl mx-auto text-center py-20 glass rounded-3xl border border-slate-200 p-8 bg-white shadow-xl">
             <div className="w-20 h-20 mx-auto bg-rose rounded-full flex items-center justify-center mb-6">
@@ -76,7 +70,8 @@ export default function CampDetailScreen() {
             <p className="text-xs text-secondary-text animate-pulse font-semibold">Redirecting to checkout & invoice details...</p>
           </div>
         ) : (
-          <div className="grid lg:grid-cols-3 gap-12">
+          <div className="space-y-12">
+            <div className="grid lg:grid-cols-3 gap-12">
             {/* Left Content (Details) */}
             <div className="lg:col-span-2 space-y-8">
               {/* Image & Title Header */}
@@ -144,58 +139,21 @@ export default function CampDetailScreen() {
                 </div>
               </div>
 
-              {/* Amenities List */}
-              <div className="glass rounded-3xl p-6 sm:p-8 border border-slate-200/60 bg-white">
-                <h3 className="font-display text-2xl font-bold text-slate-800 mb-6">What this place offers</h3>
-                <div className="grid md:grid-cols-2 gap-6">
-                  {amenities.map((a, i) => (
-                    <div key={i} className="flex items-start space-x-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-deep-forest/20 transition-all">
-                      <div className="w-10 h-10 rounded-xl bg-rose/40 flex items-center justify-center flex-shrink-0">
-                        {a.icon}
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-slate-800 mb-0.5">{a.label}</h4>
-                        <p className="text-slate-505 text-xs">{a.desc}</p>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
 
-              {/* Day Activity Itinerary */}
-              <div className="glass rounded-3xl p-6 sm:p-8 border border-slate-200/60 bg-white">
-                <h3 className="font-display text-2xl font-bold text-slate-800 mb-6">Curated Camp Itinerary</h3>
-                <div className="space-y-6">
-                  <div className="relative pl-8 border-l border-deep-forest/30">
-                    <div className="absolute top-1 -left-2.5 w-5 h-5 rounded-full bg-deep-forest flex items-center justify-center border-4 border-white" />
-                    <span className="text-secondary-text text-xs font-bold uppercase tracking-wider block mb-1">Day 01 — Mountain Trek & Bonfire</span>
-                    <h4 className="font-semibold text-slate-800 mb-2">Welcome Drink, Alpine Setup & Acclimatization Hike</h4>
-                    <p className="text-slate-505 text-sm">Arrive at base camp by 12:00 PM. Have warm organic ginger tea, check into tents, and enjoy a mild 3km walk to a beautiful waterfall. Finish the night with a warm, starlit campfire session.</p>
-                  </div>
-                  <div className="relative pl-8 border-l border-deep-forest/30">
-                    <div className="absolute top-1 -left-2.5 w-5 h-5 rounded-full bg-deep-forest flex items-center justify-center border-4 border-white" />
-                    <span className="text-secondary-text text-xs font-bold uppercase tracking-wider block mb-1">Day 02 — High Peak Summit</span>
-                    <h4 className="font-semibold text-slate-800 mb-2">Sunrise Meditation & High Altitude Meadows Ascent</h4>
-                    <p className="text-slate-505 text-sm">Wake up to panoramic peaks. Guided ascent to the beautiful scenic ridge (9,500 ft elevation) for lunch. Descend to the campsite for organic local dinner.</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Side (Sticky Booking Panel) */}
-            <div className="space-y-6">
-              <div className="glass rounded-3xl p-6 border border-slate-200/60 sticky top-28 shadow-2xl bg-white">
+            {/* Right Side (Booking Panel) */}
+            <div className="w-full h-auto self-start">
+              <div className="glass rounded-3xl p-6 sm:p-8 border border-slate-200/60 shadow-2xl bg-white w-full flex flex-col h-auto">
                 <div className="flex items-baseline justify-between mb-6 pb-4 border-b border-slate-100">
                   <div>
                     <span className="text-3xl font-black text-deep-forest">₹{basePrice.toLocaleString()}</span>
-                    <span className="text-slate-400 text-sm"> / night</span>
+                    <span className="text-slate-400 text-sm"> / day</span>
                   </div>
                   <div className="text-right">
                     <span className="text-xs text-secondary-text font-semibold uppercase tracking-wider block">Eco Verified</span>
                   </div>
                 </div>
 
-                <form onSubmit={handleBookingSubmit} className="space-y-4">
+                <form onSubmit={handleBookingSubmit} className="space-y-4 flex flex-col flex-grow mt-2">
                   {/* Select Check-in Date */}
                   <div>
                     <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Check-in Date</label>
@@ -211,15 +169,15 @@ export default function CampDetailScreen() {
                     </div>
                   </div>
 
-                  {/* Select Nights */}
+                  {/* Select Duration */}
                   <div>
-                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Duration (Nights)</label>
+                    <label className="text-xs font-bold uppercase tracking-wider text-slate-500 block mb-2">Duration (Days)</label>
                     <select
                       value={nights}
                       onChange={e => setNights(Number(e.target.value))}
                       className="w-full bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-slate-850 text-sm focus:outline-none focus:border-deep-forest"
                     >
-                      {[1, 2, 3, 4, 5, 7, 10].map(n => <option key={n} value={n} className="bg-white text-slate-800">{n} {n === 1 ? 'Night' : 'Nights'}</option>)}
+                      {[1, 2, 3, 4, 5, 7, 10].map(n => <option key={n} value={n} className="bg-white text-slate-800">{n} {n === 1 ? 'Day' : 'Days'}</option>)}
                     </select>
                   </div>
 
@@ -239,9 +197,9 @@ export default function CampDetailScreen() {
                   </div>
 
                   {/* Cost breakdown */}
-                  <div className="space-y-2 pt-4 border-t border-slate-100 text-sm">
+                  <div className="space-y-2 pt-6 border-t border-slate-100 text-sm mt-auto">
                     <div className="flex justify-between text-slate-500">
-                      <span>₹{basePrice.toLocaleString()} × {nights} nights × {guests} guests</span>
+                      <span>₹{basePrice.toLocaleString()} × {nights} {nights === 1 ? 'day' : 'days'} × {guests} guests</span>
                       <span className="text-slate-800 font-semibold">₹{(basePrice * nights * guests).toLocaleString()}</span>
                     </div>
                     <div className="flex justify-between text-slate-500">
@@ -254,21 +212,85 @@ export default function CampDetailScreen() {
                     </div>
                   </div>
 
-                  {/* Submit Booking */}
-                  <button type="submit" className="w-full btn-primary py-4 rounded-xl font-bold text-white text-base mt-4 transition-all duration-300">
-                    Book Adventure Now
-                  </button>
+                  {/* Booking Action Buttons */}
+                  <div className="space-y-3 mt-6">
+                    <button type="submit" className="w-full btn-primary py-4 rounded-xl font-bold text-white text-base transition-all duration-300">
+                      Book Camp
+                    </button>
+                    
+                    <button 
+                      type="button" 
+                      onClick={() => showToast('Booking request sent to host!')}
+                      className="w-full bg-slate-100 hover:bg-slate-200 text-slate-800 py-3.5 rounded-xl font-bold text-sm transition-all duration-300 border border-slate-200"
+                    >
+                      Request Booking
+                    </button>
+                    
+                    <button 
+                      type="button"
+                      onClick={() => showToast('Connecting you with an assistant...')}
+                      className="w-full bg-white hover:bg-rose/20 text-deep-forest py-3.5 rounded-xl font-bold text-sm transition-all duration-300 border border-deep-forest/20"
+                    >
+                      Connect with Assistant
+                    </button>
+                  </div>
                 </form>
               </div>
+            </div>
+          </div>
 
-              {/* Host Quick Panel */}
-              <div className="glass rounded-3xl p-6 border border-slate-200/60 bg-white shadow-lg">
-                <h4 className="font-semibold text-slate-800 mb-4 flex items-center"><Award className="w-5 h-5 text-secondary-text mr-2" />Meet Your Camp Host</h4>
-                <div className="flex items-center space-x-4">
-                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop" alt="Host" className="w-12 h-12 rounded-full object-cover" />
-                  <div>
-                    <p className="text-slate-805 font-bold">Avinash Himalaya</p>
-                    <p className="text-slate-505 text-xs">Superhost — 142 bookings</p>
+            {/* Full Width Sections Below */}
+            <div className="space-y-12">
+                {/* Amenities List */}
+                <div className="glass rounded-3xl p-6 sm:p-8 border border-slate-200/60 bg-white">
+                  <h3 className="font-display text-2xl font-bold text-slate-800 mb-6">What this place offers</h3>
+                  <div className="grid md:grid-cols-2 gap-6">
+                    {amenities.map((a, i) => (
+                      <div key={i} className="flex items-start space-x-4 p-4 rounded-2xl bg-slate-50 border border-slate-100 hover:border-deep-forest/20 transition-all">
+                        <div className="w-10 h-10 rounded-xl bg-rose/40 flex items-center justify-center flex-shrink-0">
+                          {a.icon}
+                        </div>
+                        <div>
+                          <h4 className="font-semibold text-slate-800 mb-0.5">{a.label}</h4>
+                          <p className="text-slate-505 text-xs">{a.desc}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+  
+                {/* Camp Gallery */}
+                <div className="glass rounded-3xl p-6 sm:p-8 border border-slate-200/60 bg-white">
+                  <div className="flex items-center justify-between mb-6">
+                    <h3 className="font-display text-2xl font-bold text-slate-800">Recent Camp Images</h3>
+                    <button className="text-secondary-text text-sm font-bold hover:underline">View all images</button>
+                  </div>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    {galleryData.slice(0, 4).map((img, i) => (
+                      <div key={i} className="relative h-32 rounded-2xl overflow-hidden group cursor-pointer border border-slate-100">
+                        <img src={img.src} alt={img.alt} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                        <div className="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+  
+                {/* Day Activity Itinerary */}
+                <div className="glass rounded-3xl p-6 sm:p-8 border border-slate-200/60 bg-white">
+                  <h3 className="font-display text-2xl font-bold text-slate-800 mb-6">Curated Camp Itinerary</h3>
+                  <div className="space-y-6">
+                    <div className="relative pl-8 border-l border-deep-forest/30">
+                      <div className="absolute top-1 -left-2.5 w-5 h-5 rounded-full bg-deep-forest flex items-center justify-center border-4 border-white" />
+                      <span className="text-secondary-text text-xs font-bold uppercase tracking-wider block mb-1">Day 01 — Mountain Trek & Bonfire</span>
+                      <h4 className="font-semibold text-slate-800 mb-2">Welcome Drink, Alpine Setup & Acclimatization Hike</h4>
+                      <p className="text-slate-505 text-sm">Arrive at base camp by 12:00 PM. Have warm organic ginger tea, check into tents, and enjoy a mild 3km walk to a beautiful waterfall. Finish the night with a warm, starlit campfire session.</p>
+                    </div>
+                    <div className="relative pl-8 border-l border-deep-forest/30">
+                      <div className="absolute top-1 -left-2.5 w-5 h-5 rounded-full bg-deep-forest flex items-center justify-center border-4 border-white" />
+                      <span className="text-secondary-text text-xs font-bold uppercase tracking-wider block mb-1">Day 02 — High Peak Summit</span>
+                      <h4 className="font-semibold text-slate-800 mb-2">Sunrise Meditation & High Altitude Meadows Ascent</h4>
+                      <p className="text-slate-505 text-sm">Wake up to panoramic peaks. Guided ascent to the beautiful scenic ridge (9,500 ft elevation) for lunch. Descend to the campsite for organic local dinner.</p>
+                    </div>
                   </div>
                 </div>
               </div>

@@ -1,19 +1,126 @@
 import { useState, useEffect, useRef } from 'react'
 import { useParams, useNavigate, useSearchParams } from 'react-router-dom'
-import { MapPin, Star, ArrowLeft, SlidersHorizontal, Mountain, Compass, Map, Layers, ChevronRight, Calendar, Users, Search, MountainSnow, Plus, Minus } from 'lucide-react'
+import { MapPin, Star, ArrowLeft, SlidersHorizontal, Mountain, Compass, Map, Layers, ChevronRight, ChevronLeft, Calendar, Users, Search, MountainSnow, Plus, Minus } from 'lucide-react'
 import { campsData } from '../../screens/data'
 import { MapModal } from '../Modals/Modals'
+
+function CampListItem({ camp, idx, isSelected, isHovered, onSelect, onHover, onLeave, cardRef, navigate }) {
+  const [currentImageIdx, setCurrentImageIdx] = useState(0)
+
+  const handlePrevImage = (e) => {
+    e.stopPropagation()
+    setCurrentImageIdx((prev) => (prev === 0 ? camp.images.length - 1 : prev - 1))
+  }
+
+  const handleNextImage = (e) => {
+    e.stopPropagation()
+    setCurrentImageIdx((prev) => (prev === camp.images.length - 1 ? 0 : prev + 1))
+  }
+
+  return (
+    <div 
+      ref={cardRef}
+      onMouseEnter={onHover}
+      onMouseLeave={onLeave}
+      onClick={onSelect}
+      className={`p-4 rounded-[2rem] border transition-all duration-300 flex flex-col sm:flex-row gap-5 cursor-pointer ${
+        isSelected 
+          ? 'border-[#EC5017] bg-orange-50/5 shadow-md scale-[1.01]' 
+          : isHovered 
+          ? 'border-slate-300 bg-slate-50/20 shadow-sm'
+          : 'border-slate-200/80 bg-white shadow-xs'
+      }`}
+    >
+      <div className="relative w-full sm:w-48 h-36 rounded-2xl overflow-hidden shrink-0 group/carousel">
+        <img 
+          src={camp.images ? camp.images[currentImageIdx] : camp.image} 
+          alt={camp.name} 
+          className="w-full h-full object-cover transition-transform duration-500" 
+        />
+        <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-black/60 text-white backdrop-blur-xs z-10">
+          #{idx + 1}
+        </span>
+        
+        {camp.images && camp.images.length > 1 && (
+          <>
+            <button 
+              onClick={handlePrevImage}
+              className="absolute left-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-slate-800 flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity z-10 shadow-sm"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+            <button 
+              onClick={handleNextImage}
+              className="absolute right-1 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-white/80 hover:bg-white text-slate-800 flex items-center justify-center opacity-0 group-hover/carousel:opacity-100 transition-opacity z-10 shadow-sm"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            
+            <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1 z-10">
+              {camp.images.map((_, i) => (
+                <div 
+                  key={i} 
+                  className={`w-1.5 h-1.5 rounded-full ${i === currentImageIdx ? 'bg-white' : 'bg-white/50'}`} 
+                />
+              ))}
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="flex-grow flex flex-col justify-between text-left">
+        <div>
+          <div className="flex justify-between items-start gap-2">
+            <h3 className="font-display text-lg font-extrabold text-slate-805 leading-snug">
+              {camp.name}
+            </h3>
+            <div className="flex items-center gap-1 text-[#EC5017] shrink-0">
+              <Star className="w-3.5 h-3.5 fill-current" />
+              <span className="text-xs font-bold text-slate-800">{camp.rating}</span>
+            </div>
+          </div>
+          
+          <p className="text-slate-500 text-xs flex items-center mt-1 font-medium">
+            <MapPin className="w-3.5 h-3.5 mr-1 text-[#EC5017]" />
+            {camp.location}
+          </p>
+
+          <p className="text-slate-450 text-xs columns-2 gap-4 mt-2 leading-relaxed font-medium">
+            {camp.description}
+          </p>
+        </div>
+
+        <div className="flex justify-between items-end mt-4 pt-3 border-t border-slate-100">
+          <div>
+            <span className="text-lg font-black text-[#EC5017]">₹{camp.price.toLocaleString()}</span>
+            <span className="text-slate-400 text-[10px] font-bold"> / night / person</span>
+          </div>
+
+          <button 
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(`/camp/${camp.id}`)
+            }}
+            className="bg-[#EC5017] hover:bg-[#ff6229] text-white font-extrabold text-xs px-4 py-2 rounded-xl flex items-center gap-1 transition-all shadow-sm cursor-pointer"
+          >
+            View Details
+            <ChevronRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default function ExploreMapScreen() {
   const { category: urlCategory } = useParams()
   const navigate = useNavigate()
   const initialCategory = urlCategory || 'all'
-  const [category, setCategory] = useState(initialCategory) // 'all', 'camps', 'treks', 'hidden'
+  const [category, setCategory] = useState(initialCategory)
   const [hoveredCampId, setHoveredCampId] = useState(null)
   const [selectedCampId, setSelectedCampId] = useState(null)
   const [searchParams] = useSearchParams()
   
-  // Search state variables
   const [searchText, setSearchText] = useState(searchParams.get('q') || '')
   const [searchDates, setSearchDates] = useState(searchParams.get('date') || '')
   const [searchDuration, setSearchDuration] = useState(searchParams.get('duration') || '')
@@ -157,7 +264,7 @@ export default function ExploreMapScreen() {
 
             {/* Direct, clean inputs directly on background with no cluttered outer card */}
             <div className="mt-5">
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 items-center">
+              <div className="grid grid-cols-1 gap-4 items-center">
                               {/* Destination Input */}
                 <div className="border border-slate-200/90 rounded-2xl px-4 py-2.5 flex items-center gap-3 bg-white hover:border-slate-350 focus-within:ring-4 focus-within:ring-[#EC5017]/10 focus-within:border-[#EC5017] transition-all text-left">
                   <MapPin className="w-4.5 h-4.5 text-slate-400 shrink-0 animate-pulse" />
@@ -172,37 +279,6 @@ export default function ExploreMapScreen() {
                     />
                   </div>
                 </div>
-
-                {/* Dates Input */}
-                <div className="border border-slate-200/90 rounded-2xl px-4 py-2.5 flex items-center gap-3 bg-white hover:border-slate-350 focus-within:ring-4 focus-within:ring-[#EC5017]/10 focus-within:border-[#EC5017] transition-all text-left">
-                  <Calendar className="w-4.5 h-4.5 text-slate-400 shrink-0" />
-                  <div className="flex-grow text-left">
-                    <span className="text-[9px] font-black text-slate-455 uppercase tracking-widest block leading-none mb-1">Add dates</span>
-                    <input
-                      type="text"
-                      value={searchDates}
-                      onChange={(e) => setSearchDates(e.target.value)}
-                      placeholder="Add dates"
-                      className="w-full bg-transparent text-xs font-bold text-slate-750 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
-                {/* Guests Input */}
-                <div className="border border-slate-200/90 rounded-2xl px-4 py-2.5 flex items-center gap-3 bg-white hover:border-slate-350 focus-within:ring-4 focus-within:ring-[#EC5017]/10 focus-within:border-[#EC5017] transition-all text-left">
-                  <Users className="w-4.5 h-4.5 text-slate-400 shrink-0" />
-                  <div className="flex-grow text-left">
-                    <span className="text-[9px] font-black text-slate-455 uppercase tracking-widest block leading-none mb-1">Add guests</span>
-                    <input
-                      type="text"
-                      value={searchGuests}
-                      onChange={(e) => setSearchGuests(e.target.value)}
-                      placeholder="Add guests"
-                      className="w-full bg-transparent text-xs font-bold text-slate-750 focus:outline-none"
-                    />
-                  </div>
-                </div>
-
               </div>
             </div>
           </div>
@@ -216,70 +292,18 @@ export default function ExploreMapScreen() {
                 const isHovered = hoveredCampId === camp.id
                 
                 return (
-                  <div 
+                  <CampListItem 
                     key={camp.id}
-                    ref={el => cardRefs.current[camp.id] = el}
-                    onMouseEnter={() => setHoveredCampId(camp.id)}
-                    onMouseLeave={() => setHoveredCampId(null)}
-                    onClick={() => setSelectedCampId(camp.id)}
-                    className={`p-4 rounded-[2rem] border transition-all duration-300 flex flex-col sm:flex-row gap-5 cursor-pointer ${
-                      isSelected 
-                        ? 'border-[#EC5017] bg-orange-50/5 shadow-md scale-[1.01]' 
-                        : isHovered 
-                        ? 'border-slate-300 bg-slate-50/20 shadow-sm'
-                        : 'border-slate-200/80 bg-white shadow-xs'
-                    }`}
-                  >
-                    {/* Camp Image */}
-                    <div className="relative w-full sm:w-48 h-36 rounded-2xl overflow-hidden shrink-0">
-                      <img src={camp.image} alt={camp.name} className="w-full h-full object-cover" />
-                      <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md text-[9px] font-black uppercase tracking-wider bg-black/60 text-white backdrop-blur-xs">
-                        #{idx + 1}
-                      </span>
-                    </div>
-
-                    {/* Camp Meta */}
-                    <div className="flex-grow flex flex-col justify-between text-left">
-                      <div>
-                        <div className="flex justify-between items-start gap-2">
-                          <h3 className="font-display text-lg font-extrabold text-slate-805 leading-snug">
-                            {camp.name}
-                          </h3>
-                          <div className="flex items-center gap-1 text-[#EC5017] shrink-0">
-                            <Star className="w-3.5 h-3.5 fill-current" />
-                            <span className="text-xs font-bold text-slate-800">{camp.rating}</span>
-                          </div>
-                        </div>
-                        
-                        <p className="text-slate-500 text-xs flex items-center mt-1 font-medium">
-                          <MapPin className="w-3.5 h-3.5 mr-1 text-[#EC5017]" />
-                          {camp.location}
-                        </p>
-
-                        <p className="text-slate-450 text-xs columns-2 gap-4 mt-2 leading-relaxed font-medium">
-                          {camp.description}
-                        </p>
-                      </div>
-
-                      <div className="flex justify-between items-end mt-4 pt-3 border-t border-slate-100">
-                        <div>
-                          <span className="text-lg font-black text-[#EC5017]">₹{camp.price.toLocaleString()}</span>
-                          <span className="text-slate-400 text-[10px] font-bold"> / night</span>
-                        </div>
-
-                        <button 
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            navigate(`/camp/${camp.id}`)
-                          }}
-                          className="bg-[#EC5017] hover:bg-[#ff6229] text-white font-extrabold text-xs px-4 py-2 rounded-xl flex items-center gap-1 transition-all shadow-sm cursor-pointer"
-                        >
-                          View Details
-                          <ChevronRight className="w-3.5 h-3.5" />
-                        </button>
-                      </div>
-                    </div>
-                  </div>
+                    camp={camp}
+                    idx={idx}
+                    isSelected={isSelected}
+                    isHovered={isHovered}
+                    onSelect={() => setSelectedCampId(camp.id)}
+                    onHover={() => setHoveredCampId(camp.id)}
+                    onLeave={() => setHoveredCampId(null)}
+                    cardRef={el => cardRefs.current[camp.id] = el}
+                    navigate={navigate}
+                  />
                 )
               })
             ) : (

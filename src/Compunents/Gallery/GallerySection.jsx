@@ -62,9 +62,9 @@ export default function GalleryTestimonialsSection() {
             <span className="inline-block px-4 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-rose text-deep-forest border border-rose/30 mb-4">Gallery</span>
             <h2 className="font-display text-4xl sm:text-5xl font-bold text-slate-800 mb-4">Visual Journey</h2>
           </div>
-          <div className="masonry-grid reveal">
+          <div className="flex md:block md:columns-2 lg:columns-3 md:gap-6 overflow-x-auto md:overflow-visible pb-6 md:pb-0 snap-x snap-mandatory hide-scrollbar -mx-4 px-4 md:mx-0 md:px-0 reveal gap-4">
             {galleryData.map((item, i) => (
-              <div key={i} className="masonry-item">
+              <div key={i} className="flex-none w-[80vw] md:w-auto break-inside-avoid mb-0 md:mb-6 snap-start">
                 <div className="relative rounded-2xl overflow-hidden cursor-pointer group shadow-sm hover:shadow-lg transition-shadow duration-300" onClick={() => setLightbox(i)}>
                   <img src={item.src} alt={item.alt} className="w-full object-cover transition-transform duration-500 group-hover:scale-110" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300">
@@ -80,6 +80,15 @@ export default function GalleryTestimonialsSection() {
       </section>
 
       <Lightbox index={lightbox} onClose={() => setLightbox(null)} onPrev={prev} onNext={next} />
+      <style dangerouslySetInnerHTML={{__html: `
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+      `}} />
     </>
   )
 }
