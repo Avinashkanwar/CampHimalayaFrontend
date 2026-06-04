@@ -4,7 +4,7 @@ import { MapPin, Star, ArrowLeft, SlidersHorizontal, Mountain, Compass, Map, Lay
 import { campsData } from '../../screens/data'
 import { MapModal } from '../Modals/Modals'
 
-function CampListItem({ camp, idx, isSelected, isHovered, onSelect, onHover, onLeave, cardRef, navigate }) {
+function CampListItem({ camp, idx, isSelected, isHovered, onSelect, onHover, onLeave, cardRef, navigate, isTrekView }) {
   const [currentImageIdx, setCurrentImageIdx] = useState(0)
 
   const handlePrevImage = (e) => {
@@ -74,10 +74,12 @@ function CampListItem({ camp, idx, isSelected, isHovered, onSelect, onHover, onL
             <h3 className="font-display text-lg font-extrabold text-slate-805 leading-snug">
               {camp.name}
             </h3>
-            <div className="flex items-center gap-1 text-[#EC5017] shrink-0">
-              <Star className="w-3.5 h-3.5 fill-current" />
-              <span className="text-xs font-bold text-slate-800">{camp.rating}</span>
-            </div>
+            {!isTrekView && (
+              <div className="flex items-center gap-1 text-[#EC5017] shrink-0">
+                <Star className="w-3.5 h-3.5 fill-current" />
+                <span className="text-xs font-bold text-slate-800">{camp.rating}</span>
+              </div>
+            )}
           </div>
           
           <p className="text-slate-500 text-xs flex items-center mt-1 font-medium">
@@ -92,8 +94,14 @@ function CampListItem({ camp, idx, isSelected, isHovered, onSelect, onHover, onL
 
         <div className="flex justify-between items-end mt-4 pt-3 border-t border-slate-100">
           <div>
-            <span className="text-lg font-black text-[#EC5017]">₹{camp.price.toLocaleString()}</span>
-            <span className="text-slate-400 text-[10px] font-bold"> / night / person</span>
+            {!isTrekView ? (
+              <>
+                <span className="text-lg font-black text-[#EC5017]">₹{camp.price.toLocaleString()}</span>
+                <span className="text-slate-400 text-[10px] font-bold"> / night / person</span>
+              </>
+            ) : (
+              <span className="text-lg font-black text-[#EC5017] opacity-0">Trek</span>
+            )}
           </div>
 
           <button 
@@ -141,10 +149,10 @@ export default function ExploreMapScreen() {
     let camps = [...campsData]
     
     // 1. Direct Category Filtering
-    if (category === 'camps') {
+    if (category === 'camps' || category === 'camping') {
       // Show all camping-related areas directly
       camps = camps.filter(c => !c.category.includes('trekking'))
-    } else if (category === 'treks') {
+    } else if (category === 'treks' || category === 'trekking') {
       // Show all trekking-related areas directly
       camps = camps.filter(c => c.category.includes('trekking'))
     } else if (category === 'hidden') {
@@ -180,11 +188,13 @@ export default function ExploreMapScreen() {
 
     switch (category) {
       case 'camps':
+      case 'camping':
         return {
           breadcrumbs: `Explore / Himachal Pradesh / Camping / ${locationSegment}`,
           title: `Camping in ${locationSegment}`
         }
       case 'treks':
+      case 'trekking':
         return {
           breadcrumbs: `Explore / Himachal Pradesh / Trekking / ${locationSegment}`,
           title: `Trekking in ${locationSegment}`
@@ -303,6 +313,7 @@ export default function ExploreMapScreen() {
                     onLeave={() => setHoveredCampId(null)}
                     cardRef={el => cardRefs.current[camp.id] = el}
                     navigate={navigate}
+                    isTrekView={category === 'treks' || category === 'trekking'}
                   />
                 )
               })
@@ -411,7 +422,7 @@ export default function ExploreMapScreen() {
                     }`}
                   >
                     <Compass className={`w-3.5 h-3.5 shrink-0 ${isSelected || isHovered ? 'animate-spin' : ''}`} />
-                    ₹{camp.price.toLocaleString()}
+                    {category === 'treks' || category === 'trekking' ? 'Trek' : `₹${camp.price.toLocaleString()}`}
                   </div>
                   
                   {/* Pin Tail */}

@@ -16,8 +16,6 @@ export default function Navbar({ onLoginClick }) {
 
   const links = [
     { to: '/', hash: '#home', label: 'Home' },
-    { to: '/', hash: '#explore', label: 'Explore Campsites' },
-    { to: '/', hash: '#gallery', label: 'Gallery' },
     { to: '/', hash: '#contact', label: 'Contact' },
     { to: '/', hash: '#query', label: 'Query', isButton: false },
     { to: '/book-tent', hash: '', label: 'Book a Tent', isButton: false },
@@ -73,7 +71,7 @@ export default function Navbar({ onLoginClick }) {
               <a 
                 key={l.label} 
                 href={l.hash} 
-                className={l.isButton ? "bg-transparent hover:bg-[#1E3E2F] hover:text-white text-[#1E3E2F] border-2 border-[#1E3E2F] shadow-sm text-sm font-bold px-5 py-2 rounded-full transition-all transform hover:-translate-y-0.5" : "nav-link text-sm font-semibold text-slate-600 hover:text-secondary-text transition-colors"} 
+                className={l.isButton ? "bg-transparent hover:bg-[#1E3E2F] hover:text-white text-[#1E3E2F] border border-[#1E3E2F]/30 shadow-sm text-sm font-medium px-5 py-2 rounded-full transition-all transform hover:-translate-y-0.5" : "nav-link text-sm font-semibold text-slate-600 hover:text-secondary-text transition-colors"} 
                 onClick={(e) => handleNavClick(e, l)}
               >
                 {l.label}
